@@ -1,42 +1,46 @@
 import random
 
 def hangman():
-    words = ['python', 'internship', 'codealpha', 'programming', 'github']
+    words = ["python", "developer", "hima", "bindu", "india", "coding", "chatgpt"]
     word = random.choice(words)
-    guesses = ''
-    turns = 6
-
+    guessed_letters = []
+    attempts = 6
+    
     print("Welcome to the Hangman Game!")
-    print("Guess the word one letter at a time.")
-    print("_ " * len(word))
+    print("_ " * len(word))  # First time underscores
 
-    while turns > 0:
-        failed = 0
-
-        for char in word:
-            if char in guesses:
-                print(char, end=' ')
+    while attempts > 0:
+        display_word = ""
+        for letter in word:
+            if letter in guessed_letters:
+                display_word += letter + " "
             else:
-                print('_', end=' ')
-                failed += 1
+                display_word += "_ "
 
-        print()
+        print("\nWord:", display_word.strip())
 
-        if failed == 0:
-            print("\nCongratulations! You won!")
-            print(f"The word was: {word}")
+        if display_word.replace(" ", "") == word:
+            print("\n🎉 Congratulations! You guessed the word correctly:", word)
             break
 
-        guess = input("Guess a letter: ")
-        guesses += guess
+        guess = input("Guess a letter: ").lower()
 
-        if guess not in word:
-            turns -= 1
-            print("Wrong guess.")
-            print(f"You have {turns} turns left.")
+        if len(guess) != 1 or not guess.isalpha():
+            print("❗ Please enter a single valid letter.")
+            continue
 
-            if turns == 0:
-                print("\nGame Over! You lose.")
-                print(f"The word was: {word}")
+        if guess in guessed_letters:
+            print("You already guessed that letter.")
+        elif guess in word:
+            guessed_letters.append(guess)
+            print("✅ Correct guess!")
+        else:
+            attempts -= 1
+            guessed_letters.append(guess)
+            print(f"❌ Wrong guess! Attempts left: {attempts}")
 
+    if attempts == 0:
+        print("\n😢 Game Over! The word was:", word)
+
+# Run the game
 hangman()
